@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const bodyParser = require('body-parser');
 const cors = require('cors')
+const mongoose = require('mongoose')
 // const cloudinary = require('cloudinary');
 
 const app = express();
@@ -38,24 +39,28 @@ app.use(function (req, res, next) {
     next();
 });
 
-const client = new MongoClient(process.env.DB, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    }
-});
+// const client = new MongoClient(process.env.DB, {
+//     serverApi: {
+//         version: ServerApiVersion.v1,
+//         strict: true,
+//         deprecationErrors: true,
+//     }
+// });
+
+
+// usar MONGODB, desinstalar mongoose
 
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        await mongoose.connect(process.env.DB)
+        console.log('Connected to database')
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await mongoose.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
-        await client.close();
+        await mongoose.disconnect()
     }
 }
 run().catch(console.dir);

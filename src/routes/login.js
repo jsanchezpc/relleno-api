@@ -7,17 +7,16 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
-
 // user login
 app.post('/login', (req, res) => {
     let body = req.body;
-    User.findOne({ username: body.username })
+    User.findOne({ email: body.email })
         .then(userDb => {
             if (!userDb) {
                 return res.status(400).json({
                     ok: false,
                     err: {
-                        message: 'Incorrect (User) or password'
+                        message: 'Incorrect email or password'
                     }
                 });
             }
@@ -26,15 +25,13 @@ app.post('/login', (req, res) => {
                 return res.status(400).json({
                     ok: false,
                     err: {
-                        message: 'Incorrect User or (password)'
+                        message: 'Incorrect email or password'
                     }
                 });
             }
             if (userDb.online === false) {
                 userDb.online = true;
             }
-
-            
 
             let token = jwt.sign({
                 user: userDb
@@ -64,6 +61,8 @@ app.post('/signup', (req, res) => {
     //     })
     // }
 
+    console.log(body)
+
     if (body.username == "" || body.username.length <= 1) {
         return res.json({
             ok: false,
@@ -71,14 +70,23 @@ app.post('/signup', (req, res) => {
         })
     }
 
+    if (!body.email || body.email.length <= 4) {
+        res.json({
+            ok: false,
+            msg: "Wrong email"
+        })
+    }
+
     const check = /^[A-Za-z]\w{8,32}$/;
     if (body.password !== '' || body.password.match(check)) {
+        console.log('solo faltta guardar jeje')
         let newUser = new User({
             username: body.username,
             email: body.email,
             password: bcrypt.hashSync(body.password, 10),
-            lang: body.userLang
+            language: body.language
         });
+        console.log('a puntitoo', newUser)
         newUser.save()
             .then(userDB => {
                 console.log('New user!')

@@ -25,7 +25,7 @@ const userSchema = new Schema({
         default: true
     },
     // friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    lang: {
+    language: {
         type: String,
         required: true
     }
