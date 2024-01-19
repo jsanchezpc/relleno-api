@@ -1,10 +1,10 @@
 require('dotenv').config();
 const express = require('express')
 const morgan = require('morgan');
-// const { MongoClient, ServerApiVersion } = require('mongodb');
 const bodyParser = require('body-parser');
 const cors = require('cors')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { configDotenv } = require('dotenv');
 // const cloudinary = require('cloudinary');
 
 const app = express();
@@ -39,17 +39,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-// const client = new MongoClient(process.env.DB, {
-//     serverApi: {
-//         version: ServerApiVersion.v1,
-//         strict: true,
-//         deprecationErrors: true,
-//     }
-// });
-
-
 // connect to database
-
 async function connectToDatabase() {
     try {
         await mongoose.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true });
