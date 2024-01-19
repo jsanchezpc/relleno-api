@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express')
 const morgan = require('morgan');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+// const { MongoClient, ServerApiVersion } = require('mongodb');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const mongoose = require('mongoose')
@@ -48,22 +48,17 @@ app.use(function (req, res, next) {
 // });
 
 
-// usar MONGODB, desinstalar mongoose
+// connect to database
 
-async function run() {
+async function connectToDatabase() {
     try {
-        // Connect the client to the server	(optional starting in v4.7)
-        await mongoose.connect(process.env.DB)
-        console.log('Connected to database')
-        // Send a ping to confirm a successful connection
-        // await mongoose.db("admin").command({ ping: 1 });
-        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
-        // Ensures that the client will close when you finish/error
-        await mongoose.disconnect()
+        await mongoose.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true });
+        console.log('Connected to the database');
+    } catch (error) {
+        console.error('Failed to connect to the database:', error);
     }
 }
-run().catch(console.dir);
+connectToDatabase();
 
 // // CLOUDINARY
 // cloudinary.config({

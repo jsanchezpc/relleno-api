@@ -61,8 +61,6 @@ app.post('/signup', (req, res) => {
     //     })
     // }
 
-    console.log(body)
-
     if (body.username == "" || body.username.length <= 1) {
         return res.json({
             ok: false,
@@ -79,14 +77,12 @@ app.post('/signup', (req, res) => {
 
     const check = /^[A-Za-z]\w{8,32}$/;
     if (body.password !== '' || body.password.match(check)) {
-        console.log('solo faltta guardar jeje')
         let newUser = new User({
             username: body.username,
             email: body.email,
             password: bcrypt.hashSync(body.password, 10),
             language: body.language
         });
-        console.log('a puntitoo', newUser)
         newUser.save()
             .then(userDB => {
                 console.log('New user!')
