@@ -7,27 +7,6 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
-app.post('/checkUser', async (req, res) => {
-    try {
-        const user = await User.findById(req.body._id);
-        if (user) {
-            let token = jwt.sign({
-                user: user
-            }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
-            res.json({
-                ok: true,
-                user: user,
-                token: token
-            });
-        } else {
-            res.status(404).json({ msg: 'Usuario no encontrado' });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Error interno del servidor' });
-    }
-});
-
 // user login
 app.post('/login', (req, res) => {
     let body = req.body;

@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const mongoose = require('mongoose');
-const { configDotenv } = require('dotenv');
+// const { configDotenv } = require('dotenv');
 // const cloudinary = require('cloudinary');
 
 const app = express();
@@ -35,9 +35,24 @@ app.use(require('./src/routes/index'));
 
 // SET HEADERS
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', `http://localhost:${process.env.APP_PORT}`);
+    const allowedOrigins = [
+        `http://localhost:${process.env.APP_PORT}`,
+        `http://192.168.1.118:${process.env.APP_PORT}`,
+        `http://192.168.1.18:${process.env.APP_PORT}`,
+    ];
+
+    const origin = req.headers.origin;
+
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
     next();
 });
+
 
 // connect to database
 async function connectToDatabase() {
