@@ -10,7 +10,6 @@ const app = express();
 // user login
 app.post('/login', (req, res) => {
     let body = req.body;
-    console.log(req.body)
     User.findOne({ email: body.email })
         .then(userDb => {
             if (!userDb) {
