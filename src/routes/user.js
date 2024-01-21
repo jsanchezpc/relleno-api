@@ -30,14 +30,10 @@ app.post('/checkUser', async (req, res) => {
 
 app.post('/updateLanguage', async (req, res) => {
     try {
-        const { userId } = req.body.id;
-        const { newLanguageCode } = req.body.newLanguageCode;
-
-        const user = await User.findById(userId);
-        user.language = newLanguageCode;
+        const user = await User.findById(req.body.id);
+        user.language = req.body.newLanguageCode;
         await user.save();
-
-        res.json({ success: true, message: 'Language updated successfully', user: user });
+        res.json({ ok: true, message: 'Language updated successfully', user: user });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
