@@ -6,9 +6,27 @@ const { VertexAI } = require("@google-cloud/vertexai");
 const app = express();
 
 app.get("/generatePoll", (req, res) => {
-  const prompt = `I'll give you a poll title and description, and I want you to give me 10 questions following the poll topic, with up to four answers for each question (use your critearia based on each question). Try to understand what the user really want and stick to the topic. This is the title: "${req.body.poll_title}", and this is the poll description: ${req.body.poll_description}`;
+  const prompt = `Given the following poll title and description:
 
-  createNonStreamingMultipartContent()
+  Title: "${req.body.poll_title}"
+  Description: "${req.body.poll_description}"
+  
+  Please provide a well-formatted JSON object containing 10 questions related to the poll topic. For each question, include up to four possible answers, and ensure that your choices are relevant to the given poll context. Try to understand the user's preferences and stick to the provided topic. Also, provide an extra key like "other" with a boolean value, indicating whether the question has an "other" option or not.
+
+  Example JSON format:
+  {
+    "questions": [
+      {
+        "question": "What is your preferred method of transportation?",
+        "answers": ["Car", "Public transportation", "Bicycle", "Walking"],
+        "other": false
+      },
+      // ... (repeat for 9 more questions)
+    ]
+  }
+`;
+
+  createNonStreamingMultipartContent();
   /**
    * TODO(developer): Update these variables before running the sample.
    */
@@ -60,6 +78,17 @@ app.get("/generatePoll", (req, res) => {
       aggregatedResponse.candidates[0].content.parts[0].text;
 
     console.log(fullTextResponse);
+    if (fullTextResponse.length > 0) {
+      res.json({
+        ok: true,
+        generated: JSON.parse(fullTextResponse),
+      });
+    } else {
+      res.json({
+        ok: false,
+        msg: "Error with vertex answer",
+      });
+    }
   }
 });
 
