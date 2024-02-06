@@ -24,7 +24,8 @@ const questionSchema = new Schema({
   answers: [answerSchema],
   other: {
     type: Boolean,
-    default: true,
+    required: false,
+    default: false,
   },
 });
 
@@ -32,6 +33,10 @@ const pollSchema = new Schema({
   id: {
     type: String,
     required: true,
+  },
+  author: {
+    type: String,
+    required: true
   },
   title: {
     type: String,
