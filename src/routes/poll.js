@@ -1,15 +1,16 @@
 "use strict";
 require('dotenv').config();
 const express = require('express');
-const User = require('./../models/User');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const Poll = require('./../models/Poll');
+// const bcrypt = require('bcrypt');
+// const jwt = require('jsonwebtoken');
 
 const app = express();
 
-// user login
+// Poll processing
 app.post('/createPoll', (req, res) => {
     let body = req.body;
+    console.log(body)
     res.json({
         ok: true,
         msg: "Poll created correctly"
