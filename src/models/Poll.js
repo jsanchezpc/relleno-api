@@ -30,10 +30,6 @@ const questionSchema = new Schema({
 });
 
 const pollSchema = new Schema({
-  id: {
-    type: String,
-    required: true,
-  },
   author: {
     type: String,
     required: true

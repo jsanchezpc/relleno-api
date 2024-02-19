@@ -7,7 +7,6 @@ const app = express();
 
 app.post("/generatePoll", async (req, res) => {
   try {
-    console.log(req.body);
     const prompt = `Given the following poll title and description:
     Title: "${req.body.poll_title}"
     Description: "${req.body.poll_description}"
@@ -54,10 +53,10 @@ app.post("/generatePoll", async (req, res) => {
         contents: [{ role: "user", parts: [textPart] }],
       };
 
-      console.log("Prompt Text:");
-      console.log(request.contents[0].parts[0].text);
+      // console.log("Prompt Text:");
+      // console.log(request.contents[0].parts[0].text);
 
-      console.log("Non-Streaming Response Text:");
+      // console.log("Non-Streaming Response Text:");
       const responseStream = await generativeVisionModel.generateContentStream(
         request
       );
@@ -81,8 +80,7 @@ app.post("/generatePoll", async (req, res) => {
         cleanedResponse = cleanedResponse.slice(0, endIndex + 1);
       }
 
-      // Ahora `cleanedResponse` contiene el texto limpio
-      console.log(cleanedResponse);
+      // console.log(cleanedResponse);
 
       // Check for and remove triple backticks at the beginning
       let toCleanString = cleanedResponse.replace(/^```+/, '');
@@ -90,7 +88,7 @@ app.post("/generatePoll", async (req, res) => {
       // Check for and remove triple backticks at the end
       let stringCleaned = toCleanString.replace(/```+$/, '');
 
-      console.log(stringCleaned);
+      // console.log(stringCleaned);
 
       if (stringCleaned.length > 0) {
         res.json({
