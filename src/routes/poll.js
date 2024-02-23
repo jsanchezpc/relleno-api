@@ -3,9 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const Poll = require("./../models/Poll");
 const Auth = require("../middlewares/Auth");
-const mongoose = require("mongoose");
-// const bcrypt = require('bcrypt');
-// const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -30,18 +27,17 @@ app.post("/createPoll", Auth, async (req, res) => {
   }
 });
 
-// Send poll list
+// Get & Send poll list
 app.post("/syncPollList", Auth, async (req, res) => {
-
-  console.log(req.body)
   try {
     const user = req.body.user.username;
-
     const polls = await Poll.find({ author: user });
-    console.log(polls)
 
     if (polls.length === 0) {
-      return res.status(404).json({ message: "No polls found for this user" });
+      return res.status(404).json({
+        ok: false, 
+        message: "No polls found for this user" 
+      });
     }
 
     res.status(200).json({
