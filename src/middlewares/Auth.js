@@ -1,19 +1,22 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 let Auth = (req, res, next) => {
-     let token = req.get('token');
-     jwt.verify(token, process.env.SEED, (err, decoded) => {
-          if (err) {
-               return res.status(401).json({
-                    ok: false,
-                    err: {
-                         message: 'Invalid token'
-                    }
-               });
-          }
-          req.user = decoded.user;
-          next();
-     });
+  try {
+    jwt.verify(req.body.token, process.env.SEED, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({
+          ok: false,
+          err: {
+            message: "Invalid token",
+          },
+        });
+      }
+      req.body.user = decoded.user;
+      next();
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = Auth;

@@ -7,11 +7,12 @@ const app = express();
 
 app.post("/generatePoll", async (req, res) => {
   try {
-    const prompt = `Given the following poll title and description:
-    Title: "${req.body.poll_title}"
-    Description: "${req.body.poll_description}"
-    Please provide a well-formatted "JSON" object containing ${req.body.pollMaxCount} questions related to the poll topic. For each question, include up to four possible answers, and ensure that your choices are relevant to the given poll context. Also, provide an extra key like "other" with a boolean value, indicating whether the question has an "other" option or not.
-    Example "JSON" format:
+    const prompt = `Please provide a well-formatted JSON object with ${req.body.pollMaxCount} questions related to the poll topic. Each question should have a unique ID, a question text, up to four relevant answer options, and an option for users to specify another response only if needed.
+    
+    Poll Title: "${req.body.poll_title}"
+    Poll Description: "${req.body.poll_description}"
+    
+    Example JSON format:
     {
       "questions": [
         {
@@ -21,11 +22,10 @@ app.post("/generatePoll", async (req, res) => {
             {"id": "1", "text": "Option 1"},
             {"id": "2", "text": "Option 2"},
             {"id": "3", "text": "Option 3"},
-            {"id": "4", "text": "Option 4"}
-          ],
-          "other": false
+            {"id": "4", "text": "Other (please specify)", "allow_other": true}
+          ]
         },
-        // ... (remaining questions)
+        // Add more questions here...
       ]
     }`;
 
@@ -69,13 +69,13 @@ app.post("/generatePoll", async (req, res) => {
       let cleanedResponse = fullTextResponse;
 
       // Eliminar contenido antes del primer '{'
-      const startIndex = fullTextResponse.indexOf('{');
+      const startIndex = fullTextResponse.indexOf("{");
       if (startIndex !== -1) {
         cleanedResponse = fullTextResponse.slice(startIndex);
       }
 
       // Eliminar contenido después del último '}'
-      const endIndex = fullTextResponse.lastIndexOf('}');
+      const endIndex = fullTextResponse.lastIndexOf("}");
       if (endIndex !== -1) {
         cleanedResponse = cleanedResponse.slice(0, endIndex + 1);
       }
@@ -83,10 +83,10 @@ app.post("/generatePoll", async (req, res) => {
       // console.log(cleanedResponse);
 
       // Check for and remove triple backticks at the beginning
-      let toCleanString = cleanedResponse.replace(/^```+/, '');
+      let toCleanString = cleanedResponse.replace(/^```+/, "");
 
       // Check for and remove triple backticks at the end
-      let stringCleaned = toCleanString.replace(/```+$/, '');
+      let stringCleaned = toCleanString.replace(/```+$/, "");
 
       // console.log(stringCleaned);
 
