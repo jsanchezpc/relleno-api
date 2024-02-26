@@ -27,6 +27,33 @@ app.post("/createPoll", Auth, async (req, res) => {
   }
 });
 
+app.post("/deletePoll", Auth, async (req, res) => {
+  try {
+    await Poll.findByIdAndDelete(req.body.id);
+    const polls = await Poll.find({ author: req.body.author });
+
+    if (polls.length === 0) {
+      return res.json({
+        ok: false,
+        message: "No polls found for this user",
+      });
+    }
+    console.log(polls)
+
+    res.status(204).json({
+      ok: true,
+      msg: "Poll deleted correctly",
+      pollList: polls,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      msg: "Error deleting poll",
+      error: error.message,
+    });
+  }
+});
+
 // Get & Send poll list
 app.post("/syncPollList", Auth, async (req, res) => {
   try {
@@ -35,8 +62,8 @@ app.post("/syncPollList", Auth, async (req, res) => {
 
     if (polls.length === 0) {
       return res.status(404).json({
-        ok: false, 
-        message: "No polls found for this user" 
+        ok: false,
+        message: "No polls found for this user",
       });
     }
 
