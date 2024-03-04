@@ -10,13 +10,20 @@ const app = express();
 app.post("/createPoll", Auth, async (req, res) => {
   try {
     const poll = req.body;
+
     const newPoll = new Poll(poll);
     const savedPoll = await newPoll.save();
+
+    const shareLink = `http://example.com/poll/${savedPoll._id}`;
+    savedPoll.shareLink = shareLink;
+
+    await savedPoll.save();
 
     res.status(201).json({
       ok: true,
       msg: "Poll created correctly",
       poll: savedPoll,
+      shareLink: shareLink,
     });
   } catch (error) {
     return res.status(500).json({
@@ -38,7 +45,7 @@ app.post("/deletePoll", Auth, async (req, res) => {
         message: "No polls found for this user",
       });
     }
-    console.log(polls)
+    console.log(polls);
 
     res.status(204).json({
       ok: true,
