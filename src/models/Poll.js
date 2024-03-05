@@ -43,6 +43,10 @@ const pollSchema = new Schema({
     required: true,
   },
   questions: [questionSchema],
+  shareLink : {
+    type: String,
+    required: false
+  }
 });
 
 module.exports = mongoose.model("Poll", pollSchema);

@@ -14,7 +14,7 @@ app.post("/createPoll", Auth, async (req, res) => {
     const newPoll = new Poll(poll);
     const savedPoll = await newPoll.save();
 
-    const shareLink = `http://example.com/poll/${savedPoll._id}`;
+    const shareLink = `https://relleno.app/poll/${savedPoll._id}`;
     savedPoll.shareLink = shareLink;
 
     await savedPoll.save();
@@ -22,8 +22,7 @@ app.post("/createPoll", Auth, async (req, res) => {
     res.status(201).json({
       ok: true,
       msg: "Poll created correctly",
-      poll: savedPoll,
-      shareLink: shareLink,
+      poll: savedPoll
     });
   } catch (error) {
     return res.status(500).json({
