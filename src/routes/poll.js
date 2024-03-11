@@ -22,12 +22,41 @@ app.post("/createPoll", Auth, async (req, res) => {
     res.status(201).json({
       ok: true,
       msg: "Poll created correctly",
-      poll: savedPoll
+      poll: savedPoll,
     });
   } catch (error) {
     return res.status(500).json({
       ok: false,
       msg: "Error creating poll",
+      error: error.message,
+    });
+  }
+});
+
+// Poll edit
+app.post("/editPoll", Auth, async (req, res) => {
+  console.log(req.body)
+  console.log('questions -> ', req.body.questions)
+  try {
+    await Poll.findByIdAndUpdate(
+      req.body.id,
+      {
+        title: req.body.title,
+        description: req.body.description,
+        questions: req.body.questions,
+      },
+      { new: true }
+    ).then((poll) => {
+      res.status(201).json({
+        ok: true,
+        msg: "Saved changes correctly",
+        poll,
+      });
+    });
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      msg: "Error saving changes",
       error: error.message,
     });
   }
