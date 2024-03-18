@@ -39,6 +39,9 @@ app.post("/generatePoll", async (req, res) => {
       const vertexAI = new VertexAI({
         project: projectId,
         location: location,
+        credentials: {
+          apiKey: process.env.GOOGLE_API_KEY
+        }
       });
 
       const generativeVisionModel = vertexAI.preview.getGenerativeModel({
